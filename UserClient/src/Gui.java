@@ -18,18 +18,18 @@ public class Gui {
         this.server = server;
     }
 
-    //метод инициализации графического интерфейса приложения сервера
+    //method, which initialize graphics interface
     protected void initFrameServer() {
         dialogWindow.setEditable(false);
-        dialogWindow.setLineWrap(true);  //автоматический перенос строки в JTextArea
+        dialogWindow.setLineWrap(true);
         frame.add(new JScrollPane(dialogWindow), BorderLayout.CENTER);
         panelButtons.add(buttonStartServer);
         panelButtons.add(buttonStopServer);
         frame.add(panelButtons, BorderLayout.SOUTH);
         frame.pack();
-        frame.setLocationRelativeTo(null); // при запуске отображает окно по центру экрана
+        frame.setLocationRelativeTo(null); // sets window to the centre of display
         frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        //класс обработки события при закрытии окна приложения Сервера
+        //processing class for closing window
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -53,7 +53,7 @@ public class Gui {
         });
     }
 
-    //метод который добавляет в текстовое окно новое сообщение
+    //method, which add new message to message's area
     public void refreshDialogWindowServer(String serviceMessage) {
         dialogWindow.append(serviceMessage);
     }

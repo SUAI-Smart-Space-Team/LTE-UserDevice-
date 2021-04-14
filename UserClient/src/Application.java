@@ -4,26 +4,27 @@ import java.net.DatagramSocket;
 
 public class Application {
 
-    private static Gui gui; //объект класса представления
+    private static Gui gui; //object of graphics interface
     private final int SERVER_PORT = 50001;
     private DatagramSocket serverSocket;
     private boolean isAlive = false;
     private ServerThread serverThread;
 
-    //метод, запускающий сервер
+    //methhod, which open udp socket and start thread
     protected void startServer() {
         try {
             serverSocket = new DatagramSocket(SERVER_PORT);
             isAlive = true;
             this.serverThread = new ServerThread(this.serverSocket);
-            this.turnOnServer();
+            gui.refreshDialogWindowServer("Создаю поток" + "\n");
+            this.serverThread.start();
             gui.refreshDialogWindowServer("Сервер запущен.\n");
         } catch (Exception e) {
             gui.refreshDialogWindowServer("Не удалось запустить сервер.\n");
         }
     }
 
-    //метод останавливающий сервер
+    //method, which close socket and turn off thread
     protected void stopServer() {
         isAlive = false;
         try {
@@ -35,14 +36,7 @@ public class Application {
         }
     }
 
-    //метод запускающий поток, в котором идёт работа с сокетом
-    protected void turnOnServer() {
-        gui.refreshDialogWindowServer("Создаю поток" + "\n");
-        this.serverThread.start();
-
-    }
-
-    //точка входа для приложения сервера
+    //entry method for application
     public static void main(String[] args) {
         Application server = new Application();
         gui = new Gui(server);
@@ -50,7 +44,7 @@ public class Application {
 
     }
 
-    //вложенный класс, который получает информацию с сокета
+    //inner class, which works with socket
     private class ServerThread extends Thread {
         private DatagramSocket socket;
         private byte[] receiveData;
@@ -59,7 +53,7 @@ public class Application {
             this.socket = inputSocket;
         }
 
-        //метод, который принимает данные из сокета и выводит их на экран
+        //method, which get data from socket and print it on application screen
         @Override
         public void run() {
             while (true) {
@@ -79,7 +73,7 @@ public class Application {
             }
         }
 
-        //метод, который парсит входящий JSON
+        //method, which parses input JSON
         private String parseMessage(String inputText) {
             int pos1 = inputText.indexOf('{');
             int pos2 = inputText.indexOf('}');
