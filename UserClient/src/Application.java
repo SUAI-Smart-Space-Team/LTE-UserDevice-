@@ -27,7 +27,6 @@ public class Application {
     protected void stopServer() {
         isAlive = false;
         try {
-            //serverThread.interrupt();
             serverSocket.close();
             gui.refreshDialogWindowServer("Сервер остановлен.\n");
 
@@ -36,6 +35,7 @@ public class Application {
         }
     }
 
+    //метод запускающий поток, в котором идёт работа с сокетом
     protected void turnOnServer() {
         gui.refreshDialogWindowServer("Создаю поток" + "\n");
         this.serverThread.start();
@@ -50,6 +50,7 @@ public class Application {
 
     }
 
+    //вложенный класс, который получает информацию с сокета
     private class ServerThread extends Thread {
         private DatagramSocket socket;
         private byte[] receiveData;
@@ -58,6 +59,7 @@ public class Application {
             this.socket = inputSocket;
         }
 
+        //метод, который принимает данные из сокета и выводит их на экран
         @Override
         public void run() {
             while (true) {
@@ -77,6 +79,7 @@ public class Application {
             }
         }
 
+        //метод, который парсит входящий JSON
         private String parseMessage(String inputText) {
             int pos1 = inputText.indexOf('{');
             int pos2 = inputText.indexOf('}');
