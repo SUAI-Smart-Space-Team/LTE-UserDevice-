@@ -1,1 +1,1 @@
-java -cp "bin/" Application
+java -jar UserClient.jar
