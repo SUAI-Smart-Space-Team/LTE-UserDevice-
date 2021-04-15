@@ -1,6 +1,4 @@
 # LTE-UserDevice-
-На Linux приложение можно запустить при помощи скрпитов.
-Для этого необходимо в папке проекта в терминале сначала прописать sh /.compile.sh , затем sh /.start.sh
-На Windows так же можно запустить приложение, через скрипт. Для этого в консоли необходимо прописать compile.bat, затем start.bat.
-На Windows могут возникнуть проблемы, если в системе не прописана переменная JAVA_HOME. В таком случае необходимо в файле compile.bat
-прописать путь до javac.
+- On Linux, the application can be run using the scrpits. To do this, first write sh /in the project directory in the terminal. compile.sh , then sh /.start.sh 
+- On Windows, you can also run the application through a script. To do this, you need to register compile in the console.bat, then start. bat. 
+- __On Windows, problems may occur if the JAVA_HOME variable is not registered in the system. In this case, it is necessary in the compile file.bat specify the path to javac.(bold)__
