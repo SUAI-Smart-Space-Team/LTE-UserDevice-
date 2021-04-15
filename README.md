@@ -2,7 +2,7 @@
 - Requirments:
   - In the command line, write the commands to install java:
     sudo apt install default-jre
-- On Linux, the application can be run using the scrpits. To do this, first write next commands in the command lime:
+- On Linux, the application can be run using the scrpits. To do this, first write next commands in the command lime from directory with file compile.sh:
   - sh ./compile.sh
   - sh ./start.sh 
 - On Windows, you can also run the application through a script. To do this, you need to register compile in the console.bat, then start. bat. 
