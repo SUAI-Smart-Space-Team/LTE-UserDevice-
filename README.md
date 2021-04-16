@@ -1,7 +1,8 @@
 # LTE-UserDevice-
 - Requirments:
-  - In the command line, write the commands to install java:
-    sudo apt install default-jre
+  - In the command line, write the commands to install java14:
+    sudo apt install openjdk-14-jre-headless
+    sudo apt install openjdk-14-jdk-headless
 - On Linux, the application can be run using the scrpits. To do this, first write next commands in the command lime from directory with file compile.sh:
   - sh ./compile.sh
   - sh ./start.sh 
