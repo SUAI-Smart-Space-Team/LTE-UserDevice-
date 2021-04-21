@@ -17,7 +17,7 @@ public class Application {
     private ServerThread WIFI_Thread;
     private String wifiIpIN;
 
-    //methhod, which open udp socket and start thread
+    //method, which open udp socket and start thread
     protected void startServer() {
         try {
             WIFI_Socket = new DatagramSocket(WIFI_PORT);
@@ -28,7 +28,6 @@ public class Application {
             this.WIFI_Thread.start();
             this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
             this.LTE_Thread.start();
-            gui.refreshDialogWindow("Ready for receiving messages.\n");
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't turn on server.\n");
         }
@@ -41,7 +40,7 @@ public class Application {
             WIFI_Socket.close();
             LTE_Socket.close();
             gui.clearServiceWindow();
-            gui.refreshDialogWindow("Server stopped.\n");
+            gui.refreshDialogWindow("WiFi - Down\nLTE - Down\n");
 
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't stop server.\n");
@@ -97,7 +96,7 @@ public class Application {
         public ServerThread(DatagramSocket inputSocket, String name) {
             this.socket = inputSocket;
             this.interfaceName = name;
-            gui.refreshStatusWindow(this.interfaceName + " UP!\n");
+            gui.refreshDialogWindow(this.interfaceName + " UP\n");
         }
 
         //method, which get data from socket and print it on application screen
