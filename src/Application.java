@@ -1,24 +1,33 @@
 import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.Random;
 
 public class Application {
 
-    private static Gui gui; //object of graphics interface
-    private final int SERVER_PORT = 50001;
-    private DatagramSocket serverSocket;
+    public static Gui gui; //object of graphics interface
+    private int WIFI_PORT;
+    private int LTE_PORT;
+    private final int MAX_PORT_NUMBER = 48999;
+    private final int MIN_PORT_NUMBER = 48654;
+    private DatagramSocket WIFI_Socket;
+    private DatagramSocket LTE_Socket;
     private boolean isAlive = false;
-    private ServerThread serverThread;
+    private ServerThread LTE_Thread;
+    private ServerThread WIFI_Thread;
     private String wifiIpIN;
 
     //methhod, which open udp socket and start thread
     protected void startServer() {
         try {
-            serverSocket = new DatagramSocket(SERVER_PORT);
+            WIFI_Socket = new DatagramSocket(WIFI_PORT);
+            LTE_Socket = new DatagramSocket(LTE_PORT);
             isAlive = true;
             this.getInfoAboutIPs();
-            this.serverThread = new ServerThread(this.serverSocket);
-            this.serverThread.start();
+            this.WIFI_Thread = new ServerThread(this.WIFI_Socket);
+            this.WIFI_Thread.start();
+            this.LTE_Thread = new ServerThread(this.LTE_Socket);
+            this.LTE_Thread.start();
             gui.refreshDialogWindow("Opened socket for receiving messages.\n");
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't turn on server.\n");
@@ -29,7 +38,7 @@ public class Application {
     protected void stopServer() {
         isAlive = false;
         try {
-            serverSocket.close();
+            WIFI_Socket.close();
             gui.refreshDialogWindow("Server stopped.\n");
 
         } catch (Exception e) {
@@ -54,6 +63,7 @@ public class Application {
             }
             gui.refreshServiceWindow("In IP: " + this.wifiIpIN + "\n");
             gui.refreshServiceWindow("Out IP: " + this.wifiIpIN + "\n");
+            gui.refreshServiceWindow("Wifi port: " + this.WIFI_PORT + "\n");
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't get info about net interfaces.\n");
         }
@@ -62,6 +72,13 @@ public class Application {
     //entry method for application
     public static void main(String[] args) {
         Application server = new Application();
+        Random random = new Random();
+        //server.WIFI_PORT = 50001;
+        //server.LTE_PORT = 50003;
+        server.WIFI_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
+        server.LTE_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
+        if (server.WIFI_PORT == server.LTE_PORT)
+            server.LTE_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
         gui = new Gui(server);
         gui.initFrameServer();
 
@@ -70,10 +87,13 @@ public class Application {
     //inner class, which works with socket
     private class ServerThread extends Thread {
         private DatagramSocket socket;
+        private int portNumber;
         private byte[] receiveData;
 
         public ServerThread(DatagramSocket inputSocket) {
             this.socket = inputSocket;
+            gui.refreshDialogWindow("My port is = " + Integer.toString(socket.getLocalPort()) + "\n");
+            gui.refreshDialogWindow("Thread is up!\n");
         }
 
         //method, which get data from socket and print it on application screen
@@ -84,7 +104,7 @@ public class Application {
                     this.receiveData = new byte[1024];
                     DatagramPacket inputPacket = new DatagramPacket(receiveData, receiveData.length);
                     try {
-                        serverSocket.receive(inputPacket);
+                        WIFI_Socket.receive(inputPacket);
                     } catch (IOException e) {
                         if (isAlive)
                             gui.refreshDialogWindow("Error on getting message\n");
