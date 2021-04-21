@@ -16,6 +16,7 @@ public class Application {
     private ServerThread LTE_Thread;
     private ServerThread WIFI_Thread;
     private String wifiIpIN;
+    private String lteIpIN;
 
     //method, which open udp socket and start thread
     protected void startServer() {
@@ -40,6 +41,7 @@ public class Application {
             WIFI_Socket.close();
             LTE_Socket.close();
             gui.clearServiceWindow();
+            gui.clearServiceWindow();
             gui.refreshDialogWindow("WiFi - Down\nLTE - Down\n");
 
         } catch (Exception e) {
@@ -61,10 +63,18 @@ public class Application {
                         this.wifiIpIN = i.getHostAddress();
                     }
                 }
+                if (name.indexOf('x') != -1) {
+                    while (element.hasMoreElements()) {
+                        InetAddress i = (InetAddress) element.nextElement();
+                        this.wifiIpIN = i.getHostAddress();
+                    }
+                }
             }
-            gui.refreshServiceWindow("In IP: " + this.wifiIpIN + "\n");
-            gui.refreshServiceWindow("Out IP: " + this.wifiIpIN + "\n");
+            gui.refreshServiceWindow("WiFi In IP: " + this.wifiIpIN + "\n");
+            gui.refreshServiceWindow("WiFi Out IP: " + this.wifiIpIN + "\n");
             gui.refreshServiceWindow("Wifi port: " + this.WIFI_PORT + "\n");
+            gui.refreshServiceWindow("LTE In IP: " + this.lteIpIN + "\n");
+            gui.refreshServiceWindow("LTE Out IP: " + this.lteIpIN + "\n");
             gui.refreshServiceWindow("LTE port: " + this.LTE_PORT + "\n");
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't get info about net interfaces.\n");

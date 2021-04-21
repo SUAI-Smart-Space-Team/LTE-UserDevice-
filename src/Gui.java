@@ -67,7 +67,7 @@ public class Gui {
     }
 
     public void clearServiceWindow() {
-        serviceWindow.removeAll();
+        serviceWindow.setText(null);
     }
 
     //method, which add new message to status area
