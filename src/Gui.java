@@ -9,7 +9,8 @@ import java.awt.event.WindowEvent;
 public class Gui {
     private JFrame frame = new JFrame("Messenger");
     private JTextArea dialogWindow = new JTextArea(20, 30);
-    private JTextArea serviceWindow = new JTextArea(20, 21);
+    private JTextArea serviceWindow = new JTextArea(10, 21);
+    private JTextArea statusWindow = new JTextArea(10, 21);
     private JButton buttonStartServer = new JButton("Turn On");
     private JButton buttonStopServer = new JButton("Turn Off");
     private JPanel panelButtons = new JPanel();
@@ -24,7 +25,9 @@ public class Gui {
         dialogWindow.setEditable(false);
         dialogWindow.setLineWrap(true);
         frame.add(new JScrollPane(dialogWindow), BorderLayout.CENTER);
-        frame.add(new JScrollPane(serviceWindow), BorderLayout.EAST);
+        JScrollPane serviceInfo = new JScrollPane(serviceWindow);
+        serviceInfo.add(statusWindow);
+        frame.add(new JScrollPane(serviceInfo), BorderLayout.EAST);
         panelButtons.add(buttonStartServer);
         panelButtons.add(buttonStopServer);
         frame.add(panelButtons, BorderLayout.SOUTH);
@@ -63,5 +66,10 @@ public class Gui {
     //method, which add new message to service area
     public void refreshServiceWindow(String serviceMessage) {
         serviceWindow.append(serviceMessage);
+    }
+
+    //method, which add new message to status area
+    public void refreshStatusWindow(String serviceMessage) {
+        statusWindow.append(serviceMessage);
     }
 }

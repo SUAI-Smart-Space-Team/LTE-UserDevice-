@@ -24,9 +24,9 @@ public class Application {
             LTE_Socket = new DatagramSocket(LTE_PORT);
             isAlive = true;
             this.getInfoAboutIPs();
-            this.WIFI_Thread = new ServerThread(this.WIFI_Socket);
+            this.WIFI_Thread = new ServerThread(this.WIFI_Socket, "WIFI");
             this.WIFI_Thread.start();
-            this.LTE_Thread = new ServerThread(this.LTE_Socket);
+            this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
             this.LTE_Thread.start();
             gui.refreshDialogWindow("Opened socket for receiving messages.\n");
         } catch (Exception e) {
@@ -89,11 +89,12 @@ public class Application {
         private DatagramSocket socket;
         private int portNumber;
         private byte[] receiveData;
+        private String interfaceName;
 
-        public ServerThread(DatagramSocket inputSocket) {
+        public ServerThread(DatagramSocket inputSocket, String name) {
             this.socket = inputSocket;
-            gui.refreshDialogWindow("My port is = " + Integer.toString(socket.getLocalPort()) + "\n");
-            gui.refreshDialogWindow("Thread is up!\n");
+            this.interfaceName = name;
+            gui.refreshStatusWindow(this.interfaceName + " UP!\n");
         }
 
         //method, which get data from socket and print it on application screen
