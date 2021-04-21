@@ -68,6 +68,10 @@ public class Gui {
         serviceWindow.append(serviceMessage);
     }
 
+    public void clearServiceWindow() {
+        serviceWindow.removeAll();
+    }
+
     //method, which add new message to status area
     public void refreshStatusWindow(String serviceMessage) {
         statusWindow.append(serviceMessage);

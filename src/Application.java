@@ -28,7 +28,7 @@ public class Application {
             this.WIFI_Thread.start();
             this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
             this.LTE_Thread.start();
-            gui.refreshDialogWindow("Opened socket for receiving messages.\n");
+            gui.refreshDialogWindow("Ready for receiving messages.\n");
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't turn on server.\n");
         }
@@ -39,6 +39,8 @@ public class Application {
         isAlive = false;
         try {
             WIFI_Socket.close();
+            LTE_Socket.close();
+            gui.clearServiceWindow();
             gui.refreshDialogWindow("Server stopped.\n");
 
         } catch (Exception e) {
@@ -64,6 +66,7 @@ public class Application {
             gui.refreshServiceWindow("In IP: " + this.wifiIpIN + "\n");
             gui.refreshServiceWindow("Out IP: " + this.wifiIpIN + "\n");
             gui.refreshServiceWindow("Wifi port: " + this.WIFI_PORT + "\n");
+            gui.refreshServiceWindow("LTE port: " + this.LTE_PORT + "\n");
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't get info about net interfaces.\n");
         }
@@ -73,8 +76,8 @@ public class Application {
     public static void main(String[] args) {
         Application server = new Application();
         Random random = new Random();
-        //server.WIFI_PORT = 50001;
-        //server.LTE_PORT = 50003;
+        //server.WIFI_PORT = 48832;
+        //server.LTE_PORT = 48654;
         server.WIFI_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
         server.LTE_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
         if (server.WIFI_PORT == server.LTE_PORT)
@@ -105,7 +108,7 @@ public class Application {
                     this.receiveData = new byte[1024];
                     DatagramPacket inputPacket = new DatagramPacket(receiveData, receiveData.length);
                     try {
-                        WIFI_Socket.receive(inputPacket);
+                        this.socket.receive(inputPacket);
                     } catch (IOException e) {
                         if (isAlive)
                             gui.refreshDialogWindow("Error on getting message\n");
