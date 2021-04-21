@@ -1,5 +1,6 @@
 # LTE-UserDevice-
 - Requirments:
+  - For correct work you need to install JDK 14 or higher. To install it on linux follow next commands:
   - In the command line, write the commands to install java14:
     sudo apt install openjdk-14-jre-headless
     sudo apt install openjdk-14-jdk-headless
