@@ -13,6 +13,8 @@ public class Application {
     private DatagramSocket WIFI_Socket;
     private DatagramSocket LTE_Socket;
     private boolean isAlive = false;
+    private boolean wifiExists = false;
+    private boolean lteExists = false;
     private ServerThread LTE_Thread;
     private ServerThread WIFI_Thread;
     private String wifiIpIN;
@@ -21,14 +23,18 @@ public class Application {
     //method, which open udp socket and start thread
     protected void startServer() {
         try {
-            WIFI_Socket = new DatagramSocket(WIFI_PORT);
-            LTE_Socket = new DatagramSocket(LTE_PORT);
             isAlive = true;
             this.getInfoAboutIPs();
-            this.WIFI_Thread = new ServerThread(this.WIFI_Socket, "WIFI");
-            this.WIFI_Thread.start();
-            this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
-            this.LTE_Thread.start();
+            if (this.wifiExists) {
+                WIFI_Socket = new DatagramSocket(WIFI_PORT);
+                this.WIFI_Thread = new ServerThread(this.WIFI_Socket, "WIFI");
+                this.WIFI_Thread.start();
+            }
+            if (this.lteExists) {
+                LTE_Socket = new DatagramSocket(LTE_PORT);
+                this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
+                this.LTE_Thread.start();
+            }
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't turn on server.\n");
         }
@@ -38,11 +44,15 @@ public class Application {
     protected void stopServer() {
         isAlive = false;
         try {
-            WIFI_Socket.close();
-            LTE_Socket.close();
+            if (wifiExists) {
+                WIFI_Socket.close();
+                gui.refreshDialogWindow("WiFi - Down\n");
+            }
+            if (lteExists) {
+                LTE_Socket.close();
+                gui.refreshDialogWindow("LTE - Down\n");
+            }
             gui.clearServiceWindow();
-            gui.clearServiceWindow();
-            gui.refreshDialogWindow("WiFi - Down\nLTE - Down\n");
 
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't stop server.\n");
@@ -60,15 +70,19 @@ public class Application {
                 if (name.indexOf('w') != -1) {
                     while (element.hasMoreElements()) {
                         InetAddress i = (InetAddress) element.nextElement();
-                        if (i.getHostAddress().indexOf('.') != -1)
+                        if (i.getHostAddress().indexOf('.') != -1) {
                             this.wifiIpIN = i.getHostAddress();
+                            this.wifiExists = true;
+                        }
                     }
                 }
                 if (name.indexOf('e') != -1) {
                     while (element.hasMoreElements()) {
                         InetAddress i = (InetAddress) element.nextElement();
-                        if (i.getHostAddress().indexOf('.') != -1)
+                        if (i.getHostAddress().indexOf('.') != -1) {
                             this.lteIpIN = i.getHostAddress();
+                            this.lteExists = true;
+                        }
                     }
                 }
             }
