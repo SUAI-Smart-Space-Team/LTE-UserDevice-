@@ -1,6 +1,6 @@
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
+import java.net.*;
+import java.util.Enumeration;
 
 public class Application {
 
@@ -9,18 +9,19 @@ public class Application {
     private DatagramSocket serverSocket;
     private boolean isAlive = false;
     private ServerThread serverThread;
+    private String wifiIpIN;
 
     //methhod, which open udp socket and start thread
     protected void startServer() {
         try {
             serverSocket = new DatagramSocket(SERVER_PORT);
             isAlive = true;
+            this.getInfoAboutIPs();
             this.serverThread = new ServerThread(this.serverSocket);
-            gui.refreshDialogWindowServer("Создаю поток" + "\n");
             this.serverThread.start();
-            gui.refreshDialogWindowServer("Сервер запущен.\n");
+            gui.refreshDialogWindow("Opened socket for receiving messages.\n");
         } catch (Exception e) {
-            gui.refreshDialogWindowServer("Не удалось запустить сервер.\n");
+            gui.refreshDialogWindow("Can't turn on server.\n");
         }
     }
 
@@ -29,10 +30,32 @@ public class Application {
         isAlive = false;
         try {
             serverSocket.close();
-            gui.refreshDialogWindowServer("Сервер остановлен.\n");
+            gui.refreshDialogWindow("Server stopped.\n");
 
         } catch (Exception e) {
-            gui.refreshDialogWindowServer("Остановить сервер не удалось.\n");
+            gui.refreshDialogWindow("Can't stop server.\n");
+        }
+    }
+
+    protected void getInfoAboutIPs() {
+        try {
+            gui.refreshServiceWindow("WIFI IP's\n");
+            Enumeration<NetworkInterface> tmp = NetworkInterface.getNetworkInterfaces();
+            while (tmp.hasMoreElements()) {
+                NetworkInterface networkInterfaceTmp = (NetworkInterface) tmp.nextElement();
+                Enumeration element = networkInterfaceTmp.getInetAddresses();
+                String name = networkInterfaceTmp.getName();
+                if (name.indexOf('w') != -1) {
+                    while (element.hasMoreElements()) {
+                        InetAddress i = (InetAddress) element.nextElement();
+                        this.wifiIpIN = i.getHostAddress();
+                    }
+                }
+            }
+            gui.refreshServiceWindow("In IP: " + this.wifiIpIN + "\n");
+            gui.refreshServiceWindow("Out IP: " + this.wifiIpIN + "\n");
+        } catch (Exception e) {
+            gui.refreshDialogWindow("Can't get info about net interfaces.\n");
         }
     }
 
@@ -64,11 +87,11 @@ public class Application {
                         serverSocket.receive(inputPacket);
                     } catch (IOException e) {
                         if (isAlive)
-                            gui.refreshDialogWindowServer("Ошибка при получении сообщения\n");
+                            gui.refreshDialogWindow("Error on getting message\n");
                         break;
                     }
                     String sentence = new String(inputPacket.getData());
-                    gui.refreshDialogWindowServer(this.parseMessage(sentence) + "\n");
+                    gui.refreshDialogWindow(this.parseMessage(sentence) + "\n");
                 }
             }
         }

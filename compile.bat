@@ -1,1 +1,1 @@
-javac -d bin -sourcepath src src/Application.java
+javac -d . -sourcepath src src/Application.java && jar cfe UserClient.jar Application ./*.class
