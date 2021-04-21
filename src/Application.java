@@ -60,13 +60,15 @@ public class Application {
                 if (name.indexOf('w') != -1) {
                     while (element.hasMoreElements()) {
                         InetAddress i = (InetAddress) element.nextElement();
-                        this.wifiIpIN = i.getHostAddress();
+                        if (i.getHostAddress().indexOf('.') != -1)
+                            this.wifiIpIN = i.getHostAddress();
                     }
                 }
-                if (name.indexOf('x') != -1) {
+                if (name.indexOf('e') != -1) {
                     while (element.hasMoreElements()) {
                         InetAddress i = (InetAddress) element.nextElement();
-                        this.wifiIpIN = i.getHostAddress();
+                        if (i.getHostAddress().indexOf('.') != -1)
+                            this.lteIpIN = i.getHostAddress();
                     }
                 }
             }
