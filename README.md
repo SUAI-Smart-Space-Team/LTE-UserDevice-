@@ -1,4 +1,6 @@
 # LTE-UserDevice-
+This application is designed to receive messages from multiple interfaces.
+
 - Requirments:
   - For correct work you need to install JDK 14 or higher. To install it on linux follow next commands:
   - In the command line, write the commands to install java14:
