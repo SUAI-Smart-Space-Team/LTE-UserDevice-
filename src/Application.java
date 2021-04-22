@@ -86,7 +86,7 @@ public class Application {
                     }
                 }
                 if (name.indexOf('e') != -1) {
-                    if (name.indexOf('V') == -1) {
+                    if (!(name.contains("Virtual") || (name.contains("VmWare")))) {
                         while (element.hasMoreElements()) {
                             InetAddress i = (InetAddress) element.nextElement();
                             if (i.getHostAddress().indexOf('.') != -1) {
