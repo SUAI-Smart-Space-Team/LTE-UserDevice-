@@ -20,3 +20,4 @@ This application is designed to receive messages from multiple interfaces.
 - Troubleshoot 
   - __On Windows, problems may occur if the JAVA_HOME variable is not registered in the system. In this case, it is necessary in the compile file.bat specify the path to javac.__
   - If you get output info like on the next picture. And for example LTE IP is null. It means that you don't connect to that interface.
+  - ![](readmeImages/wifiUp.jpg)
