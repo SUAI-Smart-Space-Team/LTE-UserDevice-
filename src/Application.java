@@ -77,11 +77,13 @@ public class Application {
                     }
                 }
                 if (name.indexOf('e') != -1) {
-                    while (element.hasMoreElements()) {
-                        InetAddress i = (InetAddress) element.nextElement();
-                        if (i.getHostAddress().indexOf('.') != -1) {
-                            this.lteIpIN = i.getHostAddress();
-                            this.lteExists = true;
+                    if (name.indexOf('V') == -1) {
+                        while (element.hasMoreElements()) {
+                            InetAddress i = (InetAddress) element.nextElement();
+                            if (i.getHostAddress().indexOf('.') != -1) {
+                                this.lteIpIN = i.getHostAddress();
+                                this.lteExists = true;
+                            }
                         }
                     }
                 }
