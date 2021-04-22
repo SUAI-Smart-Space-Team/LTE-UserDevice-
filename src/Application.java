@@ -67,6 +67,15 @@ public class Application {
                 NetworkInterface networkInterfaceTmp = (NetworkInterface) tmp.nextElement();
                 Enumeration element = networkInterfaceTmp.getInetAddresses();
                 String name = networkInterfaceTmp.getName();
+                if (name.equals("en0")) {
+                    while (element.hasMoreElements()) {
+                        InetAddress i = (InetAddress) element.nextElement();
+                        if (i.getHostAddress().indexOf('.') != -1) {
+                            this.wifiIpIN = i.getHostAddress();
+                            this.wifiExists = true;
+                        }
+                    }
+                }
                 if (name.indexOf('w') != -1) {
                     while (element.hasMoreElements()) {
                         InetAddress i = (InetAddress) element.nextElement();
