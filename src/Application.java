@@ -49,22 +49,24 @@ public class Application {
 
     //method, which close socket and turn off thread
     protected void stopServer() {
-        isAlive = false;
-        try {
-            if (wifiExists) {
-                WIFI_Socket.close();
-                gui.refreshDialogWindow("WiFi - Down\n");
-                wifiIpIN = null;
-            }
-            if (lteExists) {
-                LTE_Socket.close();
-                gui.refreshDialogWindow("LTE - Down\n");
-                lteIpIN = null;
-            }
-            gui.clearServiceWindow();
+        if (isAlive) {
+            isAlive = false;
+            try {
+                if (wifiExists) {
+                    WIFI_Socket.close();
+                    gui.refreshDialogWindow("WiFi - Down\n");
+                    wifiIpIN = null;
+                }
+                if (lteExists) {
+                    LTE_Socket.close();
+                    gui.refreshDialogWindow("LTE - Down\n");
+                    lteIpIN = null;
+                }
+                gui.clearServiceWindow();
 
-        } catch (Exception e) {
-            gui.refreshDialogWindow("Can't stop server.\n");
+            } catch (Exception e) {
+                gui.refreshDialogWindow("Can't stop server.\n");
+            }
         }
     }
 
