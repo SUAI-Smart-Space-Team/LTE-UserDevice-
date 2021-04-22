@@ -111,7 +111,7 @@ public class Application {
                 }
 
                 if (this.OS.contains("windows")) {
-                    if (lteName.contains("band luxe")) {
+                    if (lteName.contains("bandluxe")) {
                         while (element.hasMoreElements()) {
                             InetAddress i = (InetAddress) element.nextElement();
                             if (i.getHostAddress().indexOf('.') != -1) {
@@ -122,10 +122,12 @@ public class Application {
                     }
 
                     if (name.contains("wlan")) {
-                        InetAddress i = (InetAddress) element.nextElement();
-                        if (i.getHostAddress().indexOf('.') != -1) {
-                            this.wifiIpIN = i.getHostAddress();
-                            this.wifiExists = true;
+                        while (element.hasMoreElements()) {
+                            InetAddress i = (InetAddress) element.nextElement();
+                            if (i.getHostAddress().indexOf('.') != -1) {
+                                this.wifiIpIN = i.getHostAddress();
+                                this.wifiExists = true;
+                            }
                         }
                     }
                     continue;
