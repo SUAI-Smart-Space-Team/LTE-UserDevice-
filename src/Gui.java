@@ -10,7 +10,6 @@ public class Gui {
     private JFrame frame = new JFrame("Messenger");
     private JTextArea dialogWindow = new JTextArea(20, 30);
     private JTextArea serviceWindow = new JTextArea(10, 21);
-    private JTextArea statusWindow = new JTextArea(4, 4);
     private JButton buttonStartServer = new JButton("Turn On");
     private JButton buttonStopServer = new JButton("Turn Off");
     private JPanel panelButtons = new JPanel();
@@ -24,6 +23,7 @@ public class Gui {
     protected void initFrameServer() {
         dialogWindow.setEditable(false);
         dialogWindow.setLineWrap(true);
+        serviceWindow.setEditable(false);
         frame.add(new JScrollPane(dialogWindow), BorderLayout.CENTER);
         frame.add(new JScrollPane(serviceWindow), BorderLayout.EAST);
         panelButtons.add(buttonStartServer);
@@ -68,10 +68,5 @@ public class Gui {
 
     public void clearServiceWindow() {
         serviceWindow.setText(null);
-    }
-
-    //method, which add new message to status area
-    public void refreshStatusWindow(String serviceMessage) {
-        statusWindow.append(serviceMessage);
     }
 }
