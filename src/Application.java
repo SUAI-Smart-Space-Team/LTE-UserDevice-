@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.*;
 import java.util.Enumeration;
+import java.util.Locale;
 import java.util.Random;
 
 public class Application {
@@ -19,6 +20,7 @@ public class Application {
     private ServerThread WIFI_Thread;
     private String wifiIpIN;
     private String lteIpIN;
+    private String OS;
 
     //method, which open udp socket and start thread
     protected void startServer() {
@@ -67,35 +69,66 @@ public class Application {
                 NetworkInterface networkInterfaceTmp = (NetworkInterface) tmp.nextElement();
                 Enumeration element = networkInterfaceTmp.getInetAddresses();
                 String name = networkInterfaceTmp.getName();
-                if (name.equals("en0")) {
-                    while (element.hasMoreElements()) {
-                        InetAddress i = (InetAddress) element.nextElement();
-                        if (i.getHostAddress().indexOf('.') != -1) {
-                            this.wifiIpIN = i.getHostAddress();
-                            this.wifiExists = true;
-                        }
-                    }
-                }
-                if (name.indexOf('w') != -1) {
-                    while (element.hasMoreElements()) {
-                        InetAddress i = (InetAddress) element.nextElement();
-                        if (i.getHostAddress().indexOf('.') != -1) {
-                            this.wifiIpIN = i.getHostAddress();
-                            this.wifiExists = true;
-                        }
-                    }
-                }
-                if ((name.indexOf('e') != -1) && (name.indexOf('n') != -1)) {
+                String lteName = networkInterfaceTmp.getDisplayName().toLowerCase(Locale.ROOT);
+
+                if (this.OS.contains("mac")) {
+                    if (name.equals("en0")) {
                         while (element.hasMoreElements()) {
                             InetAddress i = (InetAddress) element.nextElement();
                             if (i.getHostAddress().indexOf('.') != -1) {
-                                String[] checkIP = i.getHostAddress().split(".");
-                                if (checkIP[0].equals("21")) {
+                                this.wifiIpIN = i.getHostAddress();
+                                this.wifiExists = true;
+                            }
+                        }
+                    }
+                    continue;
+                }
+
+                if (this.OS.contains("linux")) {
+                    if (name.contains("enp")) {
+                        if (lteName.contains("band luxe")) {
+                            while (element.hasMoreElements()) {
+                                InetAddress i = (InetAddress) element.nextElement();
+                                if (i.getHostAddress().indexOf('.') != -1) {
                                     this.lteIpIN = i.getHostAddress();
                                     this.lteExists = true;
                                 }
                             }
                         }
+                    }
+
+                    if (name.contains("wlp")) {
+                        while (element.hasMoreElements()) {
+                            InetAddress i = (InetAddress) element.nextElement();
+                            if (i.getHostAddress().indexOf('.') != -1) {
+                                this.wifiIpIN = i.getHostAddress();
+                                this.wifiExists = true;
+                            }
+                        }
+                    }
+                    continue;
+
+                }
+
+                if (this.OS.contains("windows")) {
+                    if (lteName.contains("band luxe")) {
+                        while (element.hasMoreElements()) {
+                            InetAddress i = (InetAddress) element.nextElement();
+                            if (i.getHostAddress().indexOf('.') != -1) {
+                                this.lteIpIN = i.getHostAddress();
+                                this.lteExists = true;
+                            }
+                        }
+                    }
+
+                    if (name.contains("wlan")) {
+                        InetAddress i = (InetAddress) element.nextElement();
+                        if (i.getHostAddress().indexOf('.') != -1) {
+                            this.wifiIpIN = i.getHostAddress();
+                            this.wifiExists = true;
+                        }
+                    }
+                    continue;
                 }
             }
             gui.refreshServiceWindow("WiFi In IP: " + this.wifiIpIN + "\n");
@@ -113,6 +146,7 @@ public class Application {
     public static void main(String[] args) {
         Application server = new Application();
         Random random = new Random();
+        server.OS = System.getProperty("os.name").toLowerCase(Locale.ROOT);
         //server.WIFI_PORT = 48832;
         //server.LTE_PORT = 48654;
         server.WIFI_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
