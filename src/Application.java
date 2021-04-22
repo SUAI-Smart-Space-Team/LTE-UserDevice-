@@ -85,7 +85,7 @@ public class Application {
                         }
                     }
                 }
-                if (name.indexOf('e') != -1) {
+                if ((name.indexOf('e') != -1) && (name.indexOf('n') != -1)) {
                         while (element.hasMoreElements()) {
                             InetAddress i = (InetAddress) element.nextElement();
                             if (i.getHostAddress().indexOf('.') != -1) {
