@@ -11,6 +11,7 @@ This application is designed to receive messages from multiple interfaces.
   - sh ./start.sh 
 - On Windows, you can also run the application through a script. To do this, you need to register compile in the console.bat, then start.bat
 - Default result of running this commands will be opened window with name "Messenger" on top. And two buttons "Turn On" and "Turn Off". After you press button "Turn On" in the center part of the window will be written names of interfaces which is work on your PC. On the right side of screen should be printed service info, which contains network interface's IP and number of port.
+- Detailed information about classes, methods, field you can get in javadoc field.
 - Example of the case when user have two inerfaces on his PC and press "Turn On" button. If output looks like on next picture, it means that both interfaces work correct. After that user can get messages.
 -![](readmeImages/bothUp.jpg)
 - Example of the case when user have two inerfaces on his PC and press "Turn Off" button. If output looks like on next picture, it means that both interfaces were off and now user can't get any messages.
