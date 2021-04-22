@@ -1,31 +1,54 @@
 import java.io.IOException;
 import java.net.*;
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
 
+/**
+ * This class control all application work. It control graphic part and control work of threads
+ * */
 public class Application {
 
-    public static Gui gui; //object of graphics interface
+    /** This is object of graphic interface*/
+    public static Gui gui;
+    /** This is number of WiFi's port*/
     private int WIFI_PORT;
+    /** This is number of LTE's port*/
     private int LTE_PORT;
+    /** This is max value which can be given to WiFi/LTE port*/
     private final int MAX_PORT_NUMBER = 48999;
+    /** This is min value which can be given to WiFi/LTE port*/
     private final int MIN_PORT_NUMBER = 48654;
+    /** This is UDP socket for WiFi interface*/
     private DatagramSocket WIFI_Socket;
+    /** This is UDP socket for LTE interface*/
     private DatagramSocket LTE_Socket;
+    /** This is flag which shows application status.
+     * If false, app can't get any messages
+     * If true, app can accept messages*/
     private boolean isAlive = false;
+    /** This is flag which shows does user have WiFi interface or not
+     * If false, user don't connected for WiFi
+     * If true, user connected for WiFi*/
     private boolean wifiExists = false;
+    /** This is flag which shows does user have LTE interface or not
+     * If false, user don't connected for LTE
+     * If true, user connected for LTE*/
     private boolean lteExists = false;
+    /** This is thread, which works with LTE interface*/
     private ServerThread LTE_Thread;
+    /** This is thread, which works with WiFi interface*/
     private ServerThread WIFI_Thread;
+    /** This is string, which contains IPv4 for WiFi interface*/
     private String wifiIpIN;
+    /** This is string, which contains IPv4 for LTE interface*/
     private String lteIpIN;
+    /** This is string, which contains name of the os on what app is running
+     * @see Application#getInfoAboutIPs() */
     private String OS;
 
-    //method, which open udp socket and start thread
+    /** This method open sockets and start threads for work with all connected interfaces,
+     * when user press "Turn On" button */
     protected void startServer() {
         try {
             if (!isAlive) {
@@ -47,7 +70,7 @@ public class Application {
         }
     }
 
-    //method, which close socket and turn off thread
+    /** This method close sockets and stop all threads, when user press "Turn Off" button */
     protected void stopServer() {
         if (isAlive) {
             isAlive = false;
@@ -70,6 +93,8 @@ public class Application {
         }
     }
 
+    /** This method takes info about WiFi, LTE connected interfaces from
+     * all network interfaces, which connected for this PC*/
     protected void getInfoAboutIPs() {
         try {
             gui.refreshServiceWindow("WIFI IP's\n");
@@ -153,7 +178,8 @@ public class Application {
         }
     }
 
-    //entry method for application
+    /** This is start method, which run the hole app, give number of ports for WiFi\LTE
+     *  and initialize graphic object */
     public static void main(String[] args) {
         Application server = new Application();
         Random random = new Random();
@@ -169,20 +195,23 @@ public class Application {
 
     }
 
-    //inner class, which works with socket
+    /** This is inner class which make all work with sockets.
+     * It receive all UDP packets, parse data from it and show it one the screen*/
     private class ServerThread extends Thread {
         private DatagramSocket socket;
-        private int portNumber;
         private byte[] receiveData;
         private String interfaceName;
 
+        /**This is constructor which creates Thread object
+         * @param inputSocket - it is interface's socket where UDP packets arrive
+         * @param name - it is name of the interface, which is served by this thread */
         public ServerThread(DatagramSocket inputSocket, String name) {
             this.socket = inputSocket;
             this.interfaceName = name;
             gui.refreshDialogWindow(this.interfaceName + " UP\n");
         }
 
-        //method, which get data from socket and print it on application screen
+        /**This is method, which receive data from packet, parse it and show on the screen*/
         @Override
         public void run() {
             while (true) {
@@ -197,14 +226,17 @@ public class Application {
                         break;
                     }
                     String sentence = new String(inputPacket.getData());
-                    Date time = new Date();
-                    SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm:ss");
-                    gui.refreshDialogWindow( timeFormat.format(time) + " : " + this.parseMessage(sentence) + "\n");
+                    gui.refreshDialogWindow( this.parseMessage(sentence) + "\n");
                 }
             }
         }
 
-        //method, which parses input JSON
+        /**
+         * This is method, which parse JSON string and return string which contains only interface's
+         * name and message
+         * @param inputText - JSON string, which is received from socket
+         * @return returns string in format - "Used interface" messageText
+         * */
         private String parseMessage(String inputText) {
             int pos1 = inputText.indexOf('{');
             int pos2 = inputText.indexOf('}');
