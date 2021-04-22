@@ -1,5 +1,8 @@
 import java.io.IOException;
 import java.net.*;
+import java.sql.Time;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Random;
@@ -153,7 +156,7 @@ public class Application {
         Application server = new Application();
         Random random = new Random();
         server.OS = System.getProperty("os.name").toLowerCase(Locale.ROOT);
-        //server.WIFI_PORT = 48832;
+        //server.WIFI_PORT = 48761;
         //server.LTE_PORT = 48654;
         server.WIFI_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
         server.LTE_PORT = (server.MIN_PORT_NUMBER + random.nextInt(server.MAX_PORT_NUMBER - server.MIN_PORT_NUMBER)) % server.MAX_PORT_NUMBER;
@@ -192,7 +195,9 @@ public class Application {
                         break;
                     }
                     String sentence = new String(inputPacket.getData());
-                    gui.refreshDialogWindow(this.parseMessage(sentence) + "\n");
+                    Date time = new Date();
+                    SimpleDateFormat timeFormat = new SimpleDateFormat("H:mm:ss");
+                    gui.refreshDialogWindow( timeFormat.format(time) + " : " + this.parseMessage(sentence) + "\n");
                 }
             }
         }
@@ -201,13 +206,21 @@ public class Application {
         private String parseMessage(String inputText) {
             int pos1 = inputText.indexOf('{');
             int pos2 = inputText.indexOf('}');
-            String tmp = inputText.substring(pos1 + 1, pos2 - 1);
+            String tmp = inputText.substring(pos1 + 1, pos2);
             StringBuilder result = new StringBuilder();
             String[] data = tmp.split(",");
             for (int i = 0; i < data.length; i++) {
-                String[] finalData = data[i].split(":");
-                result.append(finalData[1]);
-                result.append(" ");
+                if (i == 0) {
+                    String[] finalData = data[i].split(":");
+                    result.append(finalData[1]);
+                    result.append(" ");
+                }
+                if (i == 1) {
+                    String[] finalData = data[i].split(":");
+                    int end = finalData[1].lastIndexOf("\"");
+                    result.append(finalData[1].substring(1, end));
+                    result.append(" ");
+                }
             }
             result.append("\n");
             return result.toString();
