@@ -25,17 +25,19 @@ public class Application {
     //method, which open udp socket and start thread
     protected void startServer() {
         try {
-            isAlive = true;
-            this.getInfoAboutIPs();
-            if (this.wifiExists) {
-                WIFI_Socket = new DatagramSocket(WIFI_PORT);
-                this.WIFI_Thread = new ServerThread(this.WIFI_Socket, "WIFI");
-                this.WIFI_Thread.start();
-            }
-            if (this.lteExists) {
-                LTE_Socket = new DatagramSocket(LTE_PORT);
-                this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
-                this.LTE_Thread.start();
+            if (!isAlive) {
+                isAlive = true;
+                this.getInfoAboutIPs();
+                if (this.wifiExists) {
+                    WIFI_Socket = new DatagramSocket(WIFI_PORT);
+                    this.WIFI_Thread = new ServerThread(this.WIFI_Socket, "WIFI");
+                    this.WIFI_Thread.start();
+                }
+                if (this.lteExists) {
+                    LTE_Socket = new DatagramSocket(LTE_PORT);
+                    this.LTE_Thread = new ServerThread(this.LTE_Socket, "LTE");
+                    this.LTE_Thread.start();
+                }
             }
         } catch (Exception e) {
             gui.refreshDialogWindow("Can't turn on server.\n");
@@ -49,10 +51,12 @@ public class Application {
             if (wifiExists) {
                 WIFI_Socket.close();
                 gui.refreshDialogWindow("WiFi - Down\n");
+                wifiIpIN = null;
             }
             if (lteExists) {
                 LTE_Socket.close();
                 gui.refreshDialogWindow("LTE - Down\n");
+                lteIpIN = null;
             }
             gui.clearServiceWindow();
 
