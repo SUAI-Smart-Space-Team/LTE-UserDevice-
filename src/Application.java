@@ -86,15 +86,16 @@ public class Application {
                     }
                 }
                 if (name.indexOf('e') != -1) {
-                    if (!(name.contains("Virtual") || (name.contains("VmWare")))) {
                         while (element.hasMoreElements()) {
                             InetAddress i = (InetAddress) element.nextElement();
                             if (i.getHostAddress().indexOf('.') != -1) {
-                                this.lteIpIN = i.getHostAddress();
-                                this.lteExists = true;
+                                String[] checkIP = i.getHostAddress().split(".");
+                                if (checkIP[0].equals("21")) {
+                                    this.lteIpIN = i.getHostAddress();
+                                    this.lteExists = true;
+                                }
                             }
                         }
-                    }
                 }
             }
             gui.refreshServiceWindow("WiFi In IP: " + this.wifiIpIN + "\n");
