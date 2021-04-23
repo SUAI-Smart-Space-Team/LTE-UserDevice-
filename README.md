@@ -1,4 +1,4 @@
-# LTE-UserDevice-
+# WHN-UserDevice
 This application is designed to receive messages from multiple interfaces.
 
 - Requirments:
