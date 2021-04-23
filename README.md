@@ -13,6 +13,7 @@ This application is designed to receive messages from multiple interfaces.
 - Default result of running this commands will be opened window with name "Messenger" on top. And two buttons "Turn On" and "Turn Off". After you press button "Turn On" in the center part of the window will be written names of interfaces which is work on your PC. On the right side of screen should be printed service info, which contains network interface's IP and number of port.
 - Detailed information about classes, methods, field you can get in javadoc directory of git.
 - Example of the case when user have two inerfaces on his PC and press "Turn On" button. If output looks like on next picture, it means that both interfaces work correct. After that user can get messages.
+- In case, when at start of the programm user have only one itnerface, and then user connect second interface. Two make last connected interface work, user need to press button "Turn Off" and then press "Turn On". After that IP's of the second interface would change from "null" to "number.number.number.number".   
 -![](readmeImages/bothUp.jpg)
 - Example of the case when user have two inerfaces on his PC and press "Turn Off" button. If output looks like on next picture, it means that both interfaces were off and now user can't get any messages.
 -![](readmeImages/bothOff.jpg)
